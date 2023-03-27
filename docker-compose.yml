@@ -1,0 +1,15 @@
+# A Docker Compose must always start with the version tag.
+# We use '3' because it's the last version.
+version: '3'
+
+services:
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+
+    environment:
+      POSTGRES_USER: contacts
+      POSTGRES_PASSWORD: 90GPtnKUzQWEWlMockU4fJIPMM0EtbZf
+      POSTGRES_DB: contacts_db
+ 
