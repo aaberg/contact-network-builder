@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Contact.Network.Domain\Contact.Network.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Marten" Version="5.11.0" />
+  </ItemGroup>
+
 </Project>

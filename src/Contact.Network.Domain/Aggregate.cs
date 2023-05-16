@@ -1,10 +1,9 @@
-using Microsoft.CodeAnalysis.VisualBasic;
-
 namespace Contact.Network.Domain; 
 
 public abstract class Aggregate {
 
     public long Version { get; protected set; }
+    public Guid Id { get; init; }
     
     private readonly Queue<object> _uncommittedEvents = new();
 

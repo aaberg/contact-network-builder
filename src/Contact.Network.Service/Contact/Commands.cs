@@ -12,5 +12,7 @@ public static class Commands {
     public record SpecifyBirthDay(Guid Id, DateTime BirthDay);
     public record RemoveBirthDay(Guid Id);
     public record AddPhoneNumber(Guid Id, Guid PhoneNumberId, string PhoneNumber, string Label);
+    public record RemovePhoneNumber(Guid Id, Guid PhoneNumberId);
     public record AddEmail(Guid Id, Guid EmailId, string Email, string Label);
+    public record RemoveEmail(Guid Id, Guid EmailId);
 }

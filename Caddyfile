@@ -1,0 +1,4 @@
+:8080 {
+	reverse_proxy /self-service/* localhost:4433
+	reverse_proxy /* localhost:5173
+}

@@ -16,8 +16,8 @@ public class ContactEndpoint : ControllerBase {
 
     [HttpPost]
     public async Task<Domain.Contact.Contact> CreateContact([FromBody] Commands.CreateContact command) {
-        await _applicationService.Handle(command);
-        var contact = await _applicationService.Load(command.Id);
+        var contact = await _applicationService.Handle(command);
+        //var contact = await _applicationService.Load(command.Id);
         return contact!;
     }
 
@@ -32,11 +32,7 @@ public class ContactEndpoint : ControllerBase {
     }
     
     [HttpPatch("rename")]
-    public async Task<IActionResult> RenameContact([FromBody] Commands.RenameContact command) {
-        await _applicationService.Handle(command);
-        var contact = await _applicationService.Load(command.Id);
-        return contact == null ? NotFound() : Ok(contact);
-    }
+    public async Task<IActionResult> RenameContact([FromBody] Commands.RenameContact command) => Ok(await _applicationService.Handle(command));
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteContact([FromRoute] Guid id) {
@@ -44,6 +40,45 @@ public class ContactEndpoint : ControllerBase {
 
         return Ok();
     }
+
+    [HttpPatch("specify-company")]
+    public async Task<IActionResult> SpecifyCompany([FromBody] Commands.SpecifyCompany command) =>
+        Ok(await _applicationService.Handle(command));
+
+    [HttpPatch("remove-company")]
+    public async Task<IActionResult> RemoveCompany([FromBody] Commands.RemoveCompany command) =>
+        Ok(await _applicationService.Handle(command));
+
+    [HttpPatch("specify-job-title")]
+    public async Task<IActionResult> SpecifyJobTitle([FromBody] Commands.SpecifyJobTitle command) =>
+        Ok(await _applicationService.Handle(command));
+
+    [HttpPatch("remove-job-title")]
+    public async Task<IActionResult> RemoveJobTitle([FromBody] Commands.RemoveJobTitle command) =>
+        Ok(await _applicationService.Handle(command));
     
+    [HttpPatch("specify-birth-day")]
+    public async Task<IActionResult> SpecifyBirthDay([FromBody] Commands.SpecifyBirthDay command) =>
+        Ok(await _applicationService.Handle(command));
     
+    [HttpPatch("remove-birth-day")]
+    public async Task<IActionResult> RemoveBirthDay([FromBody] Commands.RemoveBirthDay command) =>
+        Ok(await _applicationService.Handle(command));
+    
+    [HttpPatch("add-phone-number")]
+    public async Task<IActionResult> AddPhoneNumber([FromBody] Commands.AddPhoneNumber command) =>
+        Ok(await _applicationService.Handle(command));
+    
+    [HttpPatch("remove-phone-number")]
+    public async Task<IActionResult> RemovePhoneNumber([FromBody] Commands.RemovePhoneNumber command) =>
+        Ok(await _applicationService.Handle(command));
+    
+    [HttpPatch("add-email")]
+    public async Task<IActionResult> AddEmail([FromBody] Commands.AddEmail command) =>
+        Ok(await _applicationService.Handle(command));
+    
+    [HttpPatch("remove-email")]
+    public async Task<IActionResult> RemoveEmail([FromBody] Commands.RemoveEmail command) =>
+        Ok(await _applicationService.Handle(command));
+
 }

@@ -2,7 +2,7 @@ namespace Contact.Network.Domain.Contact;
 
 public static class Events {
     
-    public record ContactCreated(Guid Id, string? FirstName, string LastName);
+    public record ContactCreated(Guid Id, Guid UserId, string? FirstName, string LastName);
 
     public record ContactRenamed(Guid Id, string? FirstName, string LastName);
 
@@ -18,8 +18,11 @@ public static class Events {
     public record BirthDayRemoved(Guid Id);
 
     public record PhoneNumberAdded(Guid Id, Guid PhoneNumberId, string PhoneNumber, string Label);
+
+    public record PhoneNumberRemoved(Guid Id, Guid PhoneNumberId);
     
     public record EmailAdded(Guid Id, Guid EmailId, string Email, string Label);
     
+    public record EmailRemoved(Guid Id, Guid EmailId);
     
 }

@@ -1,11 +1,16 @@
 namespace Contact.Network.Domain.Contact; 
 
 public class Contact : Aggregate {
+
+    /// <summary>
+    /// Required for serialization
+    /// </summary>
+    public Contact() {
+        
+    }
+    
     public Contact(Guid id, Guid userId, string? firstName, string lastName) {
-        Id = id;
-        UserId = userId;
-        FirstName = firstName;
-        LastName = lastName;
+        HandleEvent(new Events.ContactCreated(id, userId, firstName, lastName), Apply);
     }
 
     public Guid              Id           { get; set; }
@@ -55,10 +60,25 @@ public class Contact : Aggregate {
         HandleEvent(new Events.PhoneNumberAdded(Id, phoneNumberId, phoneNumber, label), Apply);
     }
     
+    public void RemovePhoneNumber(Guid phoneNumberId) {
+        HandleEvent(new Events.PhoneNumberRemoved(Id, phoneNumberId), Apply);
+    }
+    
     public void AddEmail(Guid emailId, string email, string label) {
         HandleEvent(new Events.EmailAdded(Id, emailId, email, label), Apply);
     }
+    
+    public void RemoveEmail(Guid emailId) {
+        HandleEvent(new Events.EmailRemoved(Id, emailId), Apply);
+    }
 
+    public void Apply(Events.ContactCreated @event) {
+        Id = @event.Id;
+        UserId = @event.UserId;
+        FirstName = @event.FirstName;
+        LastName = @event.LastName;
+    }
+    
     public void Apply(Events.ContactRenamed @event) {
         FirstName = @event.FirstName;
         LastName = @event.LastName;
@@ -78,8 +98,12 @@ public class Contact : Aggregate {
     public void Apply(Events.PhoneNumberAdded @event) => PhoneNumbers.Add(new PhoneNumber
         { Id = @event.PhoneNumberId, Label = @event.Label, Value = @event.PhoneNumber });
 
+    public void Apply(Events.PhoneNumberRemoved @event) => PhoneNumbers.RemoveAll(x => x.Id == @event.PhoneNumberId);
+
     public void Apply(Events.EmailAdded @event) => Emails.Add(new Email
         { Id = @event.EmailId, Label = @event.Label, Value = @event.Email });
+    
+    public void Apply(Events.EmailRemoved @event) => Emails.RemoveAll(x => x.Id == @event.EmailId);
 }
 
 public record PhoneNumber {
