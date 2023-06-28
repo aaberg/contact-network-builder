@@ -1,8 +1,7 @@
-using Contact.Network.Domain.Contact;
-using Contact.Network.Service;
-using Contact.Network.Service.Contact;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Contact.Network.Api.Contact;
 using Marten;
-using Marten.Events.Projections;
 using Marten.Services.Json;
 using Weasel.Core;
 
@@ -10,7 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options => {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -29,22 +33,13 @@ builder.Services.AddMarten(options => {
         options.AutoCreateSchemaObjects = AutoCreate.All;
     }
     
-    options.Events.AddEventTypes(new []{
-        typeof(Events.ContactCreated),
-        typeof(Events.ContactRenamed),
-        typeof(Events.ContactMarkedAsDeleted),
-        typeof(Events.CompanySpecified),
-        typeof(Events.CompanyRemoved),
-        typeof(Events.JobTitleSpecified),
-        typeof(Events.JobTitleRemoved),
-        typeof(Events.BirthDaySpecified),
-        typeof(Events.BirthDayRemoved),
-        typeof(Events.PhoneNumberAdded),
-        typeof(Events.EmailAdded),
-    });
-});
+    options.Events.AddContactEventTypes();
+    options.Events.AddTenantEventTypes();
+}).UseLightweightSessions();
 
-builder.Services.AddScoped<IApplicationService<Contact.Network.Domain.Contact.Contact>, ContactService>();
+builder.Services
+    .InstallContactService()
+    .InstallTenantService();
 
 var app = builder.Build();
 

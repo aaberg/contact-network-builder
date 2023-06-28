@@ -1,10 +1,13 @@
+using Contact.Network.Domain.TenantContext;
+
 namespace Contact.Network.Domain; 
 
 public abstract class Aggregate {
 
-    public long Version { get; protected set; }
-    public Guid Id { get; init; }
+    public long Version { get; set; } = 0;
     
+    public Guid Id { get; set; }
+
     private readonly Queue<object> _uncommittedEvents = new();
 
     public void Enqueue(object @event) => _uncommittedEvents.Enqueue(@event);
@@ -15,11 +18,11 @@ public abstract class Aggregate {
         return events;
     }
 
-    //protected abstract void EnsureValidState();
+    protected abstract void EnsureValidState();
 
     protected void HandleEvent<TEvent>(TEvent @event, Action<TEvent> apply) where TEvent : notnull {
         Enqueue(@event);
         apply(@event);
-        //EnsureValidState();
+        EnsureValidState();
     }
 }

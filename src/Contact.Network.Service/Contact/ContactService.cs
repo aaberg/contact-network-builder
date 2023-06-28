@@ -9,7 +9,7 @@ public class ContactService : ApplicationService<Domain.Contact.Contact> {
     
     public sealed override async Task<Domain.Contact.Contact> Handle(object command) {
         var contact = command switch {
-            Commands.CreateContact cmd => HandleCreate(() => new Domain.Contact.Contact(cmd.Id, cmd.UserId, cmd.FirstName, cmd.LastName)),
+            Commands.CreateContact cmd => HandleCreate(() => Domain.Contact.Contact.RegisterNew(cmd.Id, cmd.UserId, cmd.FirstName, cmd.LastName)),
             Commands.RenameContact cmd => await HandleUpdate(cmd.Id, contact => contact.Rename(cmd.FirstName, cmd.LastName)),
             Commands.MarkContactAsDeleted cmd => await HandleUpdate(cmd.Id, contact => contact.MarkAsDeleted()),
             Commands.SpecifyCompany cmd => await HandleUpdate(cmd.Id, contact => contact.SpecifyCompany(cmd.CompanyName)),

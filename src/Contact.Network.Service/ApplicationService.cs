@@ -12,11 +12,12 @@ public abstract class ApplicationService<TAggregate> : IApplicationService<TAggr
     }
     
     protected TAggregate HandleCreate(Func<TAggregate> create) {
+    
         var aggregate = create();
 
         var events = aggregate.DequeueUncommittedEvents();
         var _ = DocumentSession.Events.StartStream<TAggregate>(aggregate.Id, events);
-
+        
         return aggregate;
     }
 

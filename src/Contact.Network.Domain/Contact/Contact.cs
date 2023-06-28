@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace Contact.Network.Domain.Contact; 
 
+[PublicAPI]
 public class Contact : Aggregate {
 
     /// <summary>
@@ -8,21 +11,22 @@ public class Contact : Aggregate {
     public Contact() {
         
     }
-    
-    public Contact(Guid id, Guid userId, string? firstName, string lastName) {
-        HandleEvent(new Events.ContactCreated(id, userId, firstName, lastName), Apply);
-    }
 
-    public Guid              Id           { get; set; }
     public Guid              UserId       { get; set; }
     public string?           FirstName    { get; set; }
-    public string            LastName     { get; set; }
+    public string?           LastName     { get; set; } = null!;
     public bool              IsDeleted    { get; set; }
     public string?           Company      { get; set; }
     public string?           JobTitle     { get; set; }
     public DateTime?         BirthDay     { get; set; }
     public List<PhoneNumber> PhoneNumbers { get; } = new();
     public List<Email>       Emails       { get; } = new();
+    
+    public static Contact RegisterNew(Guid id, Guid userId, string? firstName, string lastName) {
+        var c = new Contact();
+        c.HandleEvent(new Events.ContactCreated(id, userId, firstName, lastName), c.Apply);
+        return c;
+    }
 
     public void Rename(string? firstName, string lastName) {
         HandleEvent(new Events.ContactRenamed(Id, firstName, lastName), Apply);
@@ -71,49 +75,60 @@ public class Contact : Aggregate {
     public void RemoveEmail(Guid emailId) {
         HandleEvent(new Events.EmailRemoved(Id, emailId), Apply);
     }
+    
+    # region Apply Events
 
-    public void Apply(Events.ContactCreated @event) {
+    private void Apply(Events.ContactCreated @event) {
         Id = @event.Id;
         UserId = @event.UserId;
         FirstName = @event.FirstName;
         LastName = @event.LastName;
     }
-    
-    public void Apply(Events.ContactRenamed @event) {
+
+    private void Apply(Events.ContactRenamed @event) {
         FirstName = @event.FirstName;
         LastName = @event.LastName;
     }
-    
-    public void Apply(Events.ContactMarkedAsDeleted @event) => IsDeleted = true;
-    
-    public void Apply(Events.CompanySpecified @event) => Company = @event.CompanyName;
-    public void Apply(Events.CompanyRemoved @event)   => Company = null;
 
-    public void Apply(Events.JobTitleSpecified @event) => JobTitle = @event.JobTitle;
-    public void Apply(Events.JobTitleRemoved @event)   => JobTitle = null;
+    private void Apply(Events.ContactMarkedAsDeleted @event) => IsDeleted = true;
 
-    public void Apply(Events.BirthDaySpecified @event) => BirthDay = @event.BirthDay;
-    public void Apply(Events.BirthDayRemoved @event)   => BirthDay = null;
+    private void Apply(Events.CompanySpecified @event) => Company = @event.CompanyName;
+    private void Apply(Events.CompanyRemoved @event)   => Company = null;
 
-    public void Apply(Events.PhoneNumberAdded @event) => PhoneNumbers.Add(new PhoneNumber
+    private void Apply(Events.JobTitleSpecified @event) => JobTitle = @event.JobTitle;
+    private void Apply(Events.JobTitleRemoved @event)   => JobTitle = null;
+
+    private void Apply(Events.BirthDaySpecified @event) => BirthDay = @event.BirthDay;
+    private void Apply(Events.BirthDayRemoved @event)   => BirthDay = null;
+
+    private void Apply(Events.PhoneNumberAdded @event) => PhoneNumbers.Add(new PhoneNumber
         { Id = @event.PhoneNumberId, Label = @event.Label, Value = @event.PhoneNumber });
 
-    public void Apply(Events.PhoneNumberRemoved @event) => PhoneNumbers.RemoveAll(x => x.Id == @event.PhoneNumberId);
+    private void Apply(Events.PhoneNumberRemoved @event) => PhoneNumbers.RemoveAll(x => x.Id == @event.PhoneNumberId);
 
-    public void Apply(Events.EmailAdded @event) => Emails.Add(new Email
+    private void Apply(Events.EmailAdded @event) => Emails.Add(new Email
         { Id = @event.EmailId, Label = @event.Label, Value = @event.Email });
+
+    private void Apply(Events.EmailRemoved @event) => Emails.RemoveAll(x => x.Id == @event.EmailId);
     
-    public void Apply(Events.EmailRemoved @event) => Emails.RemoveAll(x => x.Id == @event.EmailId);
+    #endregion
+
+    protected override void EnsureValidState() {
+        // All contacts must have some kind of name
+        if (string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName)) {
+            throw new DomainException("Contact must have a name");
+        }
+    }
 }
 
 public record PhoneNumber {
-    public required Guid    Id    { get; set; }
-    public required string  Value { get; set; }
-    public required string? Label { get; set; }
+    public required Guid    Id    { get; init; }
+    public required string  Value { get; init; }
+    public          string? Label { get; init; }
 }
 
-public class Email {
-    public Guid   Id    { get; set; }
-    public string Value { get; set; }
-    public string? Label { get; set; }
+public record Email {
+    public required Guid    Id    { get; init; }
+    public required string  Value { get; init; }
+    public          string? Label { get; init; }
 }
