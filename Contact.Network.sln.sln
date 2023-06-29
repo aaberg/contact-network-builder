@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CE4A71CB-6D92-4488-AF31-3E6F0AE1E354}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Domain", "src\Contact.Network.Domain\Contact.Network.Domain.csproj", "{B05FF643-C06E-4559-BBC4-52DFC99F5C13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Domain", "src\backend\Contact.Network.Domain\Contact.Network.Domain.csproj", "{B05FF643-C06E-4559-BBC4-52DFC99F5C13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Service", "src\Contact.Network.Service\Contact.Network.Service.csproj", "{B7321F16-0D61-439A-8C11-48846EBFD857}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Service", "src\backend\Contact.Network.Service\Contact.Network.Service.csproj", "{B7321F16-0D61-439A-8C11-48846EBFD857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Api", "src\Contact.Network.Api\Contact.Network.Api.csproj", "{A3CF3D48-D113-4BE4-8BEF-70EC63E33DE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Api", "src\backend\Contact.Network.Api\Contact.Network.Api.csproj", "{A3CF3D48-D113-4BE4-8BEF-70EC63E33DE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Domain.Tests", "tests\Contact.Network.Domain.Tests\Contact.Network.Domain.Tests.csproj", "{EDB3DA09-35AF-4997-BB50-F9E91A10E898}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contact.Network.Domain.Tests", "src\backend\Contact.Network.Domain.Tests\Contact.Network.Domain.Tests.csproj", "{EDB3DA09-35AF-4997-BB50-F9E91A10E898}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9BDF9A54-F559-40A9-B5BB-1D6899E11B69}"
 EndProject

@@ -23,7 +23,7 @@
                         <img src={data.gravatar} alt="Gravatar" />
                     </div>
                 </div>
-                <div>test</div>
+                <div class="grid"></div>
             </div>
 
             <ul class="menu p-4 ">

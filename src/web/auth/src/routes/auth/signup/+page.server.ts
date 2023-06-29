@@ -1,8 +1,10 @@
-import type {PageServerLoad} from './$types';
+import type { PageServerLoad } from './$types';
 import config from "../../../AppConfig";
-import {redirect} from "@sveltejs/kit";
-import {getAuthFlow} from "../../../authflow/getAuthFlow";
+import { redirect } from "@sveltejs/kit";
+import { getAuthFlow } from "../../../authflow/getAuthFlow";
 import { getFlowInput } from '../../../authflow/types';
+
+export const csr = false
 
 export const load = (async ({url, cookies}) => {
     const flowId = url.searchParams.get("flow")

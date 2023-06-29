@@ -17,7 +17,7 @@
         </div>
         <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <!--            <figure><img src="/padlock.png" alt="padlock"/></figure>-->
-            <form action={data.flow.ui.action} method={data.flow.ui.method} enctype="application/x-www-form-urlencoded" name="password">
+            <form action={data.flow.ui.action} method={data.flow.ui.method} enctype="application/x-www-form-urlencoded">
                 <div class="card-body">
                     
                     <input type="hidden" name="method" value="password" />
@@ -29,7 +29,7 @@
                     <AuthInput input={data.inputs.password} />
                     
                     <div class="form-control mt-6">
-                        <button name="password" value="password" type="submit" class="btn btn-primary">Sign up</button>
+                        <button class="btn btn-primary">Sign up</button>
                     </div>
                     {#if data.messages}
                         {#each data.messages as message}
