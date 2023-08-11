@@ -22,7 +22,7 @@ services:
         - intranet
   
   kratos-migrate:
-    image: oryd/kratos:v0.13.0
+    image: oryd/kratos:v1.0.0
     depends_on:
       - database
     environment:
@@ -38,7 +38,7 @@ services:
   kratos:
     depends_on:
       - kratos-migrate
-    image: oryd/kratos:v0.13.0
+    image: oryd/kratos:v1.0.0
     ports:
       - '4433:4433' # public
       - '4434:4434' # admin
